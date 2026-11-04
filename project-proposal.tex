@@ -34,7 +34,7 @@ and Controlled Experimental Comparison
   {\tt email@pw.edu.pl} \\ \And
   Anna Piórkowska \\
   354873 \\
-  {\tt anna.piorkowska3.stud@pw.edu.pl} \\ \AND
+  {\tt 01221737@pw.edu.pl} \\ \AND
   supervisor: Anna Wróblewska\\
   Warsaw University of Technology \\
   {\tt anna.wroblewska1@pw.edu.pl}}
@@ -51,11 +51,10 @@ Retrieval-augmented generation (RAG) is a technique that helps large language mo
 % albo inne nazwy frameworków które będziemy badać
 Many frameworks such as LangChain, LlamaIndex, Haystack, offer seemingly similar capabilities. They have different level of abstraction, default pipelines, component choices. Benchmarks comparing some frameworks usually changes it together with embedding model, retrieved context, prompts and some other parameters. Then it is unclear what caused the performance to differ, the framework itself, or its default settings. The project tests how different retrieval and answer quality of popular RAG frameworks is, when everything except their models, context, embeddings and prompts held constant. \\
 \section{Data}
-Question-answering systems make it easier to find answers when someone is searching for information. However, developing such tools requires appropriate test datasets that accurately reflect the complexity of the problems involved. Many existing datasets for question-based information retrieval are limited to simple, factual queries. Quasper is a dataset designed to bridge this gap, it contains 5,049 questions based on 1,585 scientific papers in the field of natural language processing. The questions and answers were prepared by individuals with expertise in NLP. First, they read the title and abstract of a paper and formulated a question concerning the work as a whole. Subsequently, a different group provided answers, complete with justifications and references to specific excerpts from the text. The results indicate that models performing well on other datasets achieve significantly lower scores on this one. Consequently, this dataset serves as an effective tool for evaluating and comparing various RAG (Retrieval-Augmented Generation) frameworks. The data includes the `id ` and the following labels: `title`, and `abstract` (of type string) and `full\_text`, `qas` (of type sequence). Each document contains an average of 3.2 questions. The `qasper-dev-v0.1.json` file, which contains 281 rows, will be used as a benchmark set. It is licensed under CC BY 4.0 and was obtained from Hugging Face.\\
-
-HotpotQA is a dataset containing 113,000 question-answer pairs that require multi-hop reasoning, based on Wikipedia. It was created by an NLP research team. The dataset includes the following labels: `answer`, `context`, `id`, `level`, `question`, `supporting\_facts`, and `type`. From the "distractors" subset, we select 150 questions for the fixed test set. The HotpotQA dataset is distributed under the CC BY-SA 4.0 license, and the data was obtained from the Hugging Face platform.
-
-
+\subsection{Quasper}
+\textbf{READY} Question-answering systems make it easier to find answers when someone is searching for information. However, developing such tools requires appropriate test datasets that accurately reflect the complexity of the problems involved. Many existing datasets for question-based information retrieval are limited to simple, factual queries. Quasper is a dataset designed to bridge this gap, it contains 5,049 questions based on 1,585 scientific papers in the field of natural language processing. The questions and answers were prepared by individuals with expertise in NLP. First, they read the title and abstract of a paper and formulated a question concerning the work as a whole. Subsequently, a different group provided answers, complete with justifications and references to specific excerpts from the text. The results indicate that models performing well on other datasets achieve significantly lower scores on this one. Consequently, this dataset serves as an effective tool for evaluating and comparing various RAG (Retrieval-Augmented Generation) frameworks. The data includes the `id ` and the following labels: `title`, and `abstract` (of type string) and `full\_text`, `qas` (of type sequence). Each document contains an average of 3.2 questions. The `qasper-dev-v0.1.json` file, which contains 281 rows, will be used as a benchmark set. It is licensed under CC BY 4.0 and was obtained from Hugging Face.
+\subsection{HotpotQA}
+\textbf{READY} HotpotQA is a dataset containing 113,000 question-answer pairs that require multi-hop reasoning, based on Wikipedia. It was created by an NLP research team. The dataset includes the following labels: `answer`, `context`, `id`, `level`, `question`, `supporting\_facts`, and `type`. From the "distractors" subset, we select 150 questions for the fixed test set. The HotpotQA dataset is distributed under the CC BY-SA 4.0 license, and the data was obtained from the Hugging Face platform.
 \section{Frameworks}
 
 \subsection{Haystack}
@@ -63,24 +62,41 @@ Haystack is an open-source framework for building AI agents and RAG applications
 
 \subsection{ARES: An Automated Evaluation Framework for RAGs}
 ARES is a publicly sourced framework designed for evaluating RAG performance \cite{ares}. The scoring and comparisons it makes grounds for are based on context relevance, answer faithfulness, and answer relevance. ARES uses light-weight LLM judges and prediction-powered inference (PPI). It is designed to rely on synthethic training data and only a small set of human-made annotations. In their work the original researchers have compared ARES to RAGAS and GPT-3.5 Judge. They compared these judges against selected datasets (among them Natural Questions and HotpotQA). Only a couple hundred human-made annotations needed to be used. They found ARES had achieved the most accurate evaluation results of the three RAG judges across all of the explored datasets. Other reviewers have mentioned excellent precision of the framework but also noted that the remaining reliance on human-made annotations might possibly restrict scalability \cite{brown2025}.
+\subsection{RAGFlow}
+RAGFlow is an open-source RAG engine based on deep document understanding. When combined with an LLM, it provides answers to questions, complete with substantiated citations from various data formats. RAGFlow enables developers to transform data into high-fidelity, production-ready AI systems with higt efficiency and precision. The model analyzes the question and, if it needed, breaks it down, retrieves knowledge, and verifies evidence. It complete context through many rounds of retrieval and reasoning to help generate well-grounded answers. It choose beetween thinking modes to control retrieval and reasoning depth according to question complexity. RAGFlow supports text, presentaions, images PDFs and other data types.
+\section{Data statement}
+The QASPER and HotpotQA are open-access datasets licensed under CC BY 4.0. The datasets contain no private personal data. We process and use them in accordance with data privacy standards.
+
+\section{Contribution table}
+\begin{tabular}{ |p{3cm}|p{3cm}|p{1cm}| } 
+\hline
+Student & Work & Hours \\
+\hline
+Jan Czemko & cell2 & cell3 \\ 
+Karolina Móżdżyńska & cell5 & cell6 \\ 
+Anna Piórkowska & cell3 & cell9 \\ 
+\hline
+\end{tabular}
+
+\section{Declaration of LLM use}
 
 
-Detailed description (\textbf{max. 4 meaningful pages}) in English, including the following information:
-\begin{enumerate}
-\item scientific goal of the project (description of the problem to be solved, research questions and hypotheses);
-\item significance of the project (state of the art, justification for tackling a specific scientific problem, justification for the pioneering nature of the project, the impact of the project results on the development of the research field and scientific discipline);
-\item concept and work plan (general work plan - with a timeline, specific research goals, results of preliminary research, risk analysis);
-\item approach \& research methodology (underlying scientific methodology, methods, techniques and research tools, methods of results analysis, equipment and devices to be used in research);
-\item well-justified project literature (a reference list for publications included in the project description, with full bibliographic data);
-\item \textbf{data statement} (new for 2026/27) -- source of the data, licence, whether it contains personal data, and what you do about it. Six lines are enough;
-\item \textbf{contribution table} -- each team member, what they did, workload in hours. \textbf{Required in this and every later phase report; a report submitted without it is not accepted for grading, not just marked down};
-\item \textbf{declaration of LLM use} -- which tools, for what. \textbf{A report without this is not accepted for grading} (new for 2026/27).
-\end{enumerate}
+% \\Detailed description (\textbf{max. 4 meaningful pages}) in English, including the following information:
+% \begin{enumerate}
+% \item scientific goal of the project (description of the problem to be solved, research questions and hypotheses);
+% \item significance of the project (state of the art, justification for tackling a specific scientific problem, justification for the pioneering nature of the project, the impact of the project results on the development of the research field and scientific discipline);
+% \item concept and work plan (general work plan - with a timeline, specific research goals, results of preliminary research, risk analysis);
+% \item approach \& research methodology (underlying scientific methodology, methods, techniques and research tools, methods of results analysis, equipment and devices to be used in research);
+% \item well-justified project literature (a reference list for publications included in the project description, with full bibliographic data);
+% \item \textbf{data statement} (new for 2026/27) -- source of the data, licence, whether it contains personal data, and what you do about it. Six lines are enough;
+% \item \textbf{contribution table} -- each team member, what they did, workload in hours. \textbf{Required in this and every later phase report; a report submitted without it is not accepted for grading, not just marked down};
+% \item \textbf{declaration of LLM use} -- which tools, for what. \textbf{A report without this is not accepted for grading} (new for 2026/27).
+% \end{enumerate}
 
-\textbf{Reminder: place this and every later submission in a folder named \texttt{surname\_surname\_surname\_surname} (all team members). The order set here must not change for the rest of the semester -- a mismatch costs 5 points.}
+% \textbf{Reminder: place this and every later submission in a folder named \texttt{surname\_surname\_surname\_surname} (all team members). The order set here must not change for the rest of the semester -- a mismatch costs 5 points.}
 
 
-\begin{thebibliography}{2}
+\begin{thebibliography}{10}
 \bibitem[Dasigi et al., 2021]{dasigi2021qasper}
 Pradeep Dasigi, Kyle Lo, Iz Beltagy, Arman Cohan, Noah A. Smith, and Matt Gardner. 2021.
 A Dataset for Question Answering on Scientific Papers. In \emph{NAACL-HLT 2021}.
@@ -88,7 +104,6 @@ A Dataset for Question Answering on Scientific Papers. In \emph{NAACL-HLT 2021}.
 \bibitem[Yang et al., 2018]{yang2018hotpotqa}
 Zhilin Yang, Peng Qi, Saizheng Zhang, Yoshua Bengio, William W. Cohen, Ruslan Salakhutdinov, and Christopher D. Manning. 2018.
 HotpotQA: A Dataset for Diverse, Explainable Multi-hop Question Answering. In \emph{EMNLP 2018}.
-
 
 \bibitem[Brown et al., 2025]{brown2025}
 Andrew Brown, Muhammad Roman, Barry Devereux. 2025.
@@ -101,13 +116,11 @@ ARES: An Automated Evaluation Framework for Retrieval-Augmented Generation Syste
 \bibitem[Pietsch et al., 2024]{haystackdocs}
 Pietsch, M., Soni, T., Chan, B., Möller, T., Kostić, B. 2020. 
 Haystack. GitHub. https://github.com/deepset-ai/haystack
-
 \end{thebibliography}
 
 
-
 % include your bib file like this:
-% \bibliographystyle{acl}
-% \bibliography{references}
+%\bibliographystyle{acl}
+%\bibliography{acl2015}
 
 \end{document}
