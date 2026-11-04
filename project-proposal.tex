@@ -13,6 +13,8 @@
 \usepackage{url}
 \usepackage{latexsym}
 \usepackage{xcolor}
+\usepackage{tikz,booktabs,array}
+\usetikzlibrary{positioning,arrows.meta,fit,backgrounds}
 
 %\setlength\titlebox{5cm}
 
@@ -26,15 +28,12 @@
 and Controlled Experimental Comparison
 \\Project Proposal for NLP Course, Winter 2026/27}
 % https://www.overleaf.com/project/63440c16442dba647b52a1ae
-\author{Jan Czemko (submitted by) \\
-  Album number \\
-  {\tt email@pw.edu.pl} \\\And
+\author{Jan Czemko \\
+  354872 \\\And
   Karolina Móżdżyńska \\
-  Album number \\
-  {\tt email@pw.edu.pl} \\ \And
+  Album number \\ \And
   Anna Piórkowska \\
-  354873 \\
-  {\tt 01221737@pw.edu.pl} \\ \AND
+  354873  \\ \AND
   supervisor: Anna Wróblewska\\
   Warsaw University of Technology \\
   {\tt anna.wroblewska1@pw.edu.pl}}
@@ -74,18 +73,113 @@ It helps build AI systems and optimize their prompts and weights—from simple c
 The QASPER and HotpotQA are open-access datasets licensed under CC BY 4.0. The datasets contain no private personal data. We process and use them in accordance with data privacy standards.
 The Haystack, ARES, RAGFlow, DSPy frameworks are open source and on public repositories on GitHub.
 
+\section{Solution concept and plan}
+
+\subsection{Hypotheses}
+\begin{itemize}
+    \item \textbf{H1:} retrieval helps over a no-retrieval LLM more on Qasper (specialised, long scientific papers) than on HotpotQA (Wikipedia, likely seen in pre-training).
+    \item \textbf{H2:} with a matched configuration (same chunker, embedder, $k$, prompt, generator), differences between frameworks stay within run-to-run spread, and configuration explains more variance than framework identity.
+    \item \textbf{H3:} frameworks differ clearly in cost (latency, memory, tokens) even when quality is equal.
+\end{itemize}
+
+
+\subsection{Pipeline}
+Figure~\ref{fig:pipeline} shows the pipeline. Every framework and an own minimal implementation run on the identical grid of chunk size, retriever, reranker and $k$; corpus, questions, generator and prompt are fixed. Questions come from Qasper and HotpotQA (Section~2). For each dataset, all source documents are pooled into one shared index, so that retrieval is a real search rather than a choice among a few paragraphs. Baselines: a no-retrieval LLM and a BM25-only RAG without any framework.
+
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[
+  node distance=10mm,
+  box/.style={draw, rounded corners=2pt, minimum height=11mm, minimum width=3.1cm, align=center, font=\footnotesize, fill=blue!6},
+  var/.style={box, fill=orange!14},
+  ev/.style={box, fill=green!10},
+  arr/.style={-{Latex[length=2mm]}, thick},
+  lab/.style={font=\scriptsize, gray, above}]
+  \node[box] (data) {Data\\[-1pt]\scriptsize Qasper, HotpotQA};
+  \node[var, right=of data] (ret) {Retrieval\\[-1pt]\scriptsize chunking, retriever, reranker};
+  \node[box, right=of ret] (gen) {Generator LLM\\[-1pt]\scriptsize fixed model, prompt};
+  \node[ev, right=of gen] (eval) {Evaluation\\[-1pt]\scriptsize metrics, ARES, cost};
+  \draw[arr] (data)--(ret) node[lab,midway]{question};
+  \draw[arr] (ret)--(gen) node[lab,midway]{chunks};
+  \draw[arr] (gen)--(eval) node[lab,midway]{answer};
+  \draw[arr] (ret.south) -- ++(0,-6mm) -| ([xshift=-4mm]eval.south) node[lab,below,pos=0.35]{retrieved chunks};
+  \draw[arr] (data.south) -- ++(0,-11mm) -| ([xshift=4mm]eval.south) node[lab,below,pos=0.35]{gold answers};
+  \begin{scope}[on background layer]
+    \node[draw=gray, dashed, rounded corners, fit=(ret)(gen), inner sep=3mm,
+          label={[font=\scriptsize, gray]above:\emph{run in each framework + own baseline}}] {};
+  \end{scope}
+\end{tikzpicture}
+\caption{Experimental pipeline. The orange stage is varied in a grid; blue stages are fixed. Each framework is run on the identical grid with the same data and metrics. Retrieval metrics use the retrieved chunks, answer metrics, ARES and cost use the generated answers. Baselines (no retrieval, BM25 only) are described in the text.}
+\label{fig:pipeline}
+\end{figure*}
+
+\subsection{Metrics}
+\begin{itemize}
+    \item \textbf{Retrieval:} Recall@5 (primary), MRR, nDCG@10.
+    \item \textbf{Answer:} exact match and token F1 (primary).
+    \item \textbf{Faithfulness:} ARES score \cite{ares}, the same evaluator for all frameworks (not Haystack's built-in ones), checked against about 150 items labelled by the team (Cohen's $\kappa$) and used only if $\kappa\ge0.6$.
+    \item \textbf{Cost:} latency, peak memory and tokens per query.
+    \item \textbf{Aggregation:} macro-average per dataset and split; failures score 0.
+    \item \textbf{Uncertainty:} mean $\pm$ std over at least 3 seeds with 95\% bootstrap confidence intervals; a difference between frameworks is claimed only if the interval excludes 0.
+\end{itemize}
+
+\subsection{Success deliverables}
+\begin{itemize}
+    \item \textbf{D1:} one reproducible repository running at least 2 frameworks and 2 baselines on at least 2 datasets over the full grid with at least 3 seeds, from which a stranger reproduces one result using the README alone.
+    \item \textbf{D2:} a quantified answer to H1--H3 (effect sizes with intervals), a decision rule (``use a framework / use plain RAG / skip retrieval'') and an error analysis of at least 20 failures grouped into named types.
+\end{itemize}
+
+\subsection{Work plan and owners}
+Jan owns the pipeline core, the grid runner, compute and the Haystack adapter; Karolina the data, the RAGFlow adapter, literature and error analysis; Anna the metrics, ARES, statistics and the report. Each result is reviewed by the next person in the cycle Jan $\rightarrow$ Karolina $\rightarrow$ Anna $\rightarrow$ Jan. Table~\ref{tab:plan} gives the week-by-week plan.
+
+\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.7cm}>{\raggedright\arraybackslash}p{4.1cm}>{\raggedright\arraybackslash}p{4.1cm}>{\raggedright\arraybackslash}p{4.1cm}@{}}
+\toprule
+\textbf{Week} & \textbf{Jan} & \textbf{Karolina} & \textbf{Anna}\\
+\midrule
+W1: 5--11 Nov & repository, config schema, Haystack pipeline end to end on 5 questions & Qasper and HotpotQA loaders, fixed seeded question lists & metric code (token F1, exact match, Recall@5, MRR, nDCG@10), unit tests on toy data\\
+\addlinespace
+W2: 12--18 Nov\newline\textit{18 Nov: mid-term video} & BM25-only baseline; proof of concept: Haystack and BM25 on 50 Qasper questions with token F1 and latency & Qasper evidence-to-chunk mapping, EDA start, literature table & video script and recording; check on a sample of 50 Qasper questions that the shared index retrieves the right paper\\
+\addlinespace
+W3: 19--25 Nov\newline\textit{25 Nov: Q\&A} & no-retrieval baseline; \textbf{budget estimate} (calls, hours, cost) for the full grid & RAGFlow adapter (pair session with Jan) & ARES setup and judge training; rebuttal; draft analysis plan (tests, variance method for H2)\\
+\addlinespace
+W4: 26 Nov--2 Dec\newline\textit{2 Dec: report} & pilot grid (10\% of questions, 1 seed) for both frameworks; runner resumes after failure; README draft & parity check of both frameworks and the own baseline under the matched configuration (H2); EDA report; revised literature & \textbf{freeze analysis plan} (tag in repo: metrics, tests, variance method); report\\
+\addlinespace
+W5: 3--9 Dec\newline\textit{9 Dec: feedback meeting} & launch the full grid, seed 1, Qasper & sample 150 items for ARES labelling (stratified over frameworks, disjoint from calibration); label & label the same items independently; ARES calibration on the disjoint set\\
+\addlinespace
+W6: 10--16 Dec & full grid, seed 1, HotpotQA; first sanity table & error analysis on seed-1 outputs, draft of failure types & $\kappa$ computed; \textbf{gate 16 Dec}: ARES used only if $\kappa\ge0.6$; dry run of the statistics on seed 1\\
+\addlinespace
+W7: 17--23 Dec & seeds 2--3 launched; cost measurements on an idle machine & at least 20 failures grouped into named types & statistics on seed 1; draft tables and figures for H1--H3\\
+\addlinespace
+W8: 24--30 Dec & buffer: runs continue unattended, Jan monitors & light drafting, no deadline: related-work text from the literature table & backup for the runs\\
+\addlinespace
+W9: 31 Dec--6 Jan\newline\textit{6 Jan: results freeze} & seeds finished, reruns of failures, tag the frozen results & error analysis finalised on the frozen results & final statistics: effect sizes, intervals, decision rule\\
+\addlinespace
+W10: 7--13 Jan\newline\textit{13 Jan: report, video, Q\&A} & final README; stranger test (a classmate reproduces one result); demonstration notebook & final literature, quiz, check of the data statement, error-analysis section & report, slides, video, LLM declaration, contribution table\\
+\addlinespace
+W11: 14--20 Jan\newline\textit{20 Jan: rebuttals} & own answers to final Q\&A & own answers to final Q\&A & own answers to final Q\&A\\
+\bottomrule
+\end{tabular}
+\caption{Weekly plan with named owners, aligned with the course deadlines (in italics). D1 and D2 are due on 13 Jan. Everyone logs hours weekly for the contribution table.}
+\label{tab:plan}
+\end{table*}
+
+
 \section{Contribution table}
 \begin{tabular}{ |p{3cm}|p{3cm}|p{1cm}| } 
 \hline
 Student & Work & Hours \\
 \hline
-Jan Czemko & cell2 & cell3 \\ 
+Jan Czemko & Solution concept and plan & 3h \\ 
 Karolina Móżdżyńska & cell5 & cell6 \\ 
 Anna Piórkowska & cell3 & cell9 \\ 
 \hline
 \end{tabular}
 
 \section{Declaration of LLM use}
+AI was used for creating LaTeX tables and figures, as well as general spell checking and grammar correction/improvment
 
 
 % \\Detailed description (\textbf{max. 4 meaningful pages}) in English, including the following information:
