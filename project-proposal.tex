@@ -54,7 +54,18 @@ Many frameworks such as LangChain, LlamaIndex, Haystack, offer seemingly similar
 Question-answering systems make it easier to find answers when someone is searching for information. However, developing such tools requires appropriate test datasets that accurately reflect the complexity of the problems involved. Many existing datasets for question-based information retrieval are limited to simple, factual queries. Quasper is a dataset designed to bridge this gap, it contains 5,049 questions based on 1,585 scientific papers in the field of natural language processing. The questions and answers were prepared by individuals with expertise in NLP. First, they read the title and abstract of a paper and formulated a question concerning the work as a whole. Subsequently, a different group provided answers, complete with justifications and references to specific excerpts from the text. The results indicate that models performing well on other datasets achieve significantly lower scores on this one. Consequently, this dataset serves as an effective tool for evaluating and comparing various RAG (Retrieval-Augmented Generation) frameworks. The data includes the `id ` and the following labels: `title`, and `abstract` (of type string) and `full\_text`, `qas` (of type sequence). Each document contains an average of 3.2 questions. The `qasper-dev-v0.1.json` file, which contains 281 rows, will be used as a benchmark set. It is licensed under CC BY 4.0 and was obtained from Hugging Face.\\
 
 HotpotQA is a dataset containing 113,000 question-answer pairs that require multi-hop reasoning, based on Wikipedia. It was created by an NLP research team. The dataset includes the following labels: `answer`, `context`, `id`, `level`, `question`, `supporting\_facts`, and `type`. From the "distractors" subset, we select 150 questions for the fixed test set. The HotpotQA dataset is distributed under the CC BY-SA 4.0 license, and the data was obtained from the Hugging Face platform.
-\\Detailed description (\textbf{max. 4 meaningful pages}) in English, including the following information:
+
+
+\section{Frameworks}
+
+\subsection{Haystack}
+Haystack is an open-source framework for building AI agents and RAG applications \cite{haystackdocs}. Its core characteristic is an architecture based on pipelines, which together with components (nodes) and other elements such as Agents provide basis for an observable, clean structure. The connections between components are strongly typed, which further supports that goal. The framework also offers built-in tracing support. It also features its own RAG evaluators while simultaneously supporting adding external ones.
+
+\subsection{ARES: An Automated Evaluation Framework for RAGs}
+ARES is a publicly sourced framework designed for evaluating RAG performance \cite{ares}. The scoring and comparisons it makes grounds for are based on context relevance, answer faithfulness, and answer relevance. ARES uses light-weight LLM judges and prediction-powered inference (PPI). It is designed to rely on synthethic training data and only a small set of human-made annotations. In their work the original researchers have compared ARES to RAGAS and GPT-3.5 Judge. They compared these judges against selected datasets (among them Natural Questions and HotpotQA). Only a couple hundred human-made annotations needed to be used. They found ARES had achieved the most accurate evaluation results of the three RAG judges across all of the explored datasets. Other reviewers have mentioned excellent precision of the framework but also noted that the remaining reliance on human-made annotations might possibly restrict scalability \cite{brown2025}.
+
+
+Detailed description (\textbf{max. 4 meaningful pages}) in English, including the following information:
 \begin{enumerate}
 \item scientific goal of the project (description of the problem to be solved, research questions and hypotheses);
 \item significance of the project (state of the art, justification for tackling a specific scientific problem, justification for the pioneering nature of the project, the impact of the project results on the development of the research field and scientific discipline);
@@ -82,7 +93,7 @@ HotpotQA: A Dataset for Diverse, Explainable Multi-hop Question Answering. In \e
 
 
 % include your bib file like this:
-%\bibliographystyle{acl}
-%\bibliography{acl2015}
+\bibliographystyle{acl}
+\bibliography{references}
 
 \end{document}
