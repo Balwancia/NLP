@@ -62,10 +62,17 @@ Haystack is an open-source framework for building AI agents and RAG applications
 
 \subsection{ARES: An Automated Evaluation Framework for RAGs}
 ARES is a publicly sourced framework designed for evaluating RAG performance \cite{ares}. The scoring and comparisons it makes grounds for are based on context relevance, answer faithfulness, and answer relevance. ARES uses light-weight LLM judges and prediction-powered inference (PPI). It is designed to rely on synthethic training data and only a small set of human-made annotations. In their work the original researchers have compared ARES to RAGAS and GPT-3.5 Judge. They compared these judges against selected datasets (among them Natural Questions and HotpotQA). Only a couple hundred human-made annotations needed to be used. They found ARES had achieved the most accurate evaluation results of the three RAG judges across all of the explored datasets. Other reviewers have mentioned excellent precision of the framework but also noted that the remaining reliance on human-made annotations might possibly restrict scalability \cite{brown2025}.
+
 \subsection{RAGFlow}
 RAGFlow is an open-source RAG engine based on deep document understanding. When combined with an LLM, it provides answers to questions, complete with substantiated citations from various data formats. RAGFlow enables developers to transform data into high-fidelity, production-ready AI systems with higt efficiency and precision. The model analyzes the question and, if it needed, breaks it down, retrieves knowledge, and verifies evidence. It complete context through many rounds of retrieval and reasoning to help generate well-grounded answers. It choose beetween thinking modes to control retrieval and reasoning depth according to question complexity. RAGFlow supports text, presentaions, images PDFs and other data types.
+
+\subsection{DSPy: Declarative Self-improving Python}
+DSPy is an opensource framework for programming—rather than prompting—language models.
+It helps build AI systems and optimize their prompts and weights—from simple classifiers to complex RAG pipelines and agents.DSPy stands for Declarative Self-improving Python. It can be used to Python code and then teach LM to deliver high-quality outputs. It compose programs with  primitives such as signatures, modules and optimizers.
+
 \section{Data statement}
 The QASPER and HotpotQA are open-access datasets licensed under CC BY 4.0. The datasets contain no private personal data. We process and use them in accordance with data privacy standards.
+The Haystack, ARES, RAGFlow, DSPy frameworks are open source and on public repositories on GitHub.
 
 \section{Contribution table}
 \begin{tabular}{ |p{3cm}|p{3cm}|p{1cm}| } 
@@ -116,6 +123,20 @@ ARES: An Automated Evaluation Framework for Retrieval-Augmented Generation Syste
 \bibitem[Pietsch et al., 2024]{haystackdocs}
 Pietsch, M., Soni, T., Chan, B., Möller, T., Kostić, B. 2020. 
 Haystack. GitHub. https://github.com/deepset-ai/haystack
+
+\bibitem[InfiniFlow, 2024]{ragflow}
+InfiniFlow. 2024. GitHub. https://github.com/infiniflow/ragflow 
+
+\bibitem[Stanford NLP, 2024]{dspy_repo}
+Omar Khattab, Stanford NLP.
+DSPy: The Framework for Programming—Not Prompting—Language Models.
+GitHub. https://github.com/stanfordnlp/dspy.
+
+\bibitem[Stanford NLP, 2024]{dspy_docs}
+Omar Khattab, Stanford NLP.
+DSPy Documentation: Program, Don't Prompt, Your LLMs.
+https://dspy.ai/current/.
+
 \end{thebibliography}
 
 
