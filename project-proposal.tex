@@ -38,7 +38,6 @@ and Controlled Experimental Comparison
   supervisor: Anna Wróblewska\\
   Warsaw University of Technology \\
   {\tt anna.wroblewska1@pw.edu.pl}}
-
 \date{}
 
 \begin{document}
@@ -51,12 +50,15 @@ and Controlled Experimental Comparison
   Write about the proposed work touching the research gap you are addressing, novelty, and on the proposed deliverable aimed from this project.
   (Short description up to 250 words.)
 \end{abstract}
-
+% w przegladzie literatury uwzglednilismy flashraga, longraga, miniraga i na podstawie dokumentacji langchain i llamaindex
 \section{Introduction}
 Retrieval-augmented generation (RAG) is a technique that helps large language models to retrieve and incorporate new information from external data sources, that supplement knowledge from the LLM's pre-existing training data. 
 % albo inne nazwy frameworków które będziemy badać
-Many frameworks such as LangChain, LlamaIndex, Haystack, offer seemingly similar capabilities. They have different level of abstraction, default pipelines, component choices. Benchmarks comparing some frameworks usually changes it together with embedding model, retrieved context, prompts and some other parameters. Then it is unclear what caused the performance to differ, the framework itself, or its default settings. The project tests how different retrieval and answer quality of popular RAG frameworks is, when everything except their models held constant. \\
+Many frameworks such as LangChain, LlamaIndex, Haystack, offer seemingly similar capabilities. They have different level of abstraction, default pipelines, component choices. Benchmarks comparing some frameworks usually changes it together with embedding model, retrieved context, prompts and some other parameters. Then it is unclear what caused the performance to differ, the framework itself, or its default settings. The project tests how different retrieval and answer quality of popular RAG frameworks is, when everything except their models, context, embeddings and prompts held constant. \\
+\section{Data}
+Question-answering systems make it easier to find answers when someone is searching for information. However, developing such tools requires appropriate test datasets that accurately reflect the complexity of the problems involved. Many existing datasets for question-based information retrieval are limited to simple, factual queries. Quasper is a dataset designed to bridge this gap, it contains 5,049 questions based on 1,585 scientific papers in the field of natural language processing. The questions and answers were prepared by individuals with expertise in NLP. First, they read the title and abstract of a paper and formulated a question concerning the work as a whole. Subsequently, a different group provided answers, complete with justifications and references to specific excerpts from the text. The results indicate that models performing well on other datasets achieve significantly lower scores on this one. Consequently, this dataset serves as an effective tool for evaluating and comparing various RAG (Retrieval-Augmented Generation) frameworks. The data includes the `id ` and the following labels: `title`, and `abstract` (of type string) and `full\_text`, `qas` (of type sequence). Each document contains an average of 3.2 questions. The `qasper-dev-v0.1.json` file, which contains 281 rows, will be used as a benchmark set. It is licensed under CC BY 4.0 and was obtained from Hugging Face.\\
 
+HotpotQA is a dataset containing 113,000 question-answer pairs that require multi-hop reasoning, based on Wikipedia. It was created by an NLP research team. The dataset includes the following labels: `answer`, `context`, `id`, `level`, `question`, `supporting\_facts`, and `type`. From the "distractors" subset, we select 150 questions for the fixed test set. The HotpotQA dataset is distributed under the CC BY-SA 4.0 license, and the data was obtained from the Hugging Face platform.
 \\Detailed description (\textbf{max. 4 meaningful pages}) in English, including the following information:
 \begin{enumerate}
 \item scientific goal of the project (description of the problem to be solved, research questions and hypotheses);
@@ -70,6 +72,10 @@ Many frameworks such as LangChain, LlamaIndex, Haystack, offer seemingly similar
 \end{enumerate}
 
 \textbf{Reminder: place this and every later submission in a folder named \texttt{surname\_surname\_surname\_surname} (all team members). The order set here must not change for the rest of the semester -- a mismatch costs 5 points.}
+
+
+\section{References}
+
 
 % include your bib file like this:
 %\bibliographystyle{acl}
